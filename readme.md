@@ -15,7 +15,7 @@ This README documents setup, usage, and deployment so the tool can be maintained
 
 1. Paste this URL into your browser:
 ```
-alt1://addapp/https://safecracking.zakary2841.co.uk/appconfig.json
+alt1://addapp/https://pertinate.github.io/alt1-safecracking-timer/appconfig.json
 ```
 2. Alt1 will register the app. Ensure that you tick the boxes to grant the necessary permissions.
    
