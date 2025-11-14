@@ -1,9 +1,8 @@
 //alt1 base libs, provides all the commonly used methods for image matching and capture
 //also gives your editor info about the window.alt1 api
-import * as a1lib from "@alt1/base";
-import { ImgRef, ImgRefBind, ImgRefData, mixColor } from "@alt1/base";
-import ChatBoxReader, * as a1chat from "@alt1/chatbox";
-import tooltip from "@alt1/tooltip";
+import * as a1lib from "alt1/base";
+import ChatBoxReader from "alt1/chatbox";
+import tooltip from "alt1/tooltip";
 
 //tell webpack to add index.html and appconfig.json to output
 require("!file-loader?name=[name].[ext]!./index.html");
@@ -19,7 +18,8 @@ let toggle = <HTMLInputElement>document.getElementById("tooltip_toggle");
 if (useTooltip) toggle.setAttribute("checked", "checked");
 else toggle.removeAttribute("checked");
 toggle.addEventListener("change", (event) => {
-  localStorage.setItem("useTooltip", !useTooltip == true ? "true" : "false");
+  useTooltip = toggle.checked;
+  localStorage.setItem("useTooltip", useTooltip ? "true" : "false");
   if (useTooltip) toggle.setAttribute("checked", "checked");
   else toggle.removeAttribute("checked");
 });
@@ -69,7 +69,6 @@ setInterval(() => {
   }
 }, 1000);
 const redraw = () => {
-  //console.log("Mouse location:", alt1.mousePosition);
   const progressList = document.getElementById("progress_list");
 
   if (progressList) {
@@ -77,7 +76,6 @@ const redraw = () => {
       const currentValue = Date.now() - next.start;
       const max = next.available - next.start;
       const secondsLeft = currentValue > max ? 0 : (max - currentValue) / 1000;
-      // console.log(currentValue, max, next);
       acc += `
             <li
                 id="location-${idx}"
@@ -132,7 +130,6 @@ export const deleteSafeLocation = (idx: number) => {
   redraw();
 };
 export const changeNoteFor = (idx: number, text: string) => {
-  // console.log(idx, text);
   safeLocations[idx].note = text;
   const currentNote = document.getElementById(
     `progress-label-${idx}`
@@ -201,13 +198,11 @@ const t = setInterval(function () {
           secondsLeft
         )} seconds left`;
       }
-      // console.log('finished safes');
     });
 
     localStorage.setItem("safeLocations", JSON.stringify(safeLocations));
     localStorage.setItem("currentIdx", JSON.stringify(index));
     localStorage.setItem("lastConsumedLine", lastConsumedLine);
-    // console.log('finished');
   } catch (ex) {
     console.error(ex);
   }
@@ -233,15 +228,6 @@ export const AddSafe = () => {
 export const Start = () => {
   for (let index = 0; index < safeLocations.length; index++) {
     let now = new Date().valueOf();
-    console.log(
-      `New start: ${now} | New End: ${
-        now +
-        (safeLocations[index]?.location === `Zemouregal's Fortress` ||
-        safeLocations[index]?.location === "Wilderness"
-          ? 1000 * 60 * 10
-          : 1000 * 60 * 5)
-      } | safe: ${JSON.stringify(safeLocations[index], null, "\t")}`
-    );
     safeLocations[index].available =
       now +
       (safeLocations[index]?.location === `Zemouregal's Fortress` ||
